@@ -28,10 +28,10 @@ differences.
 
 The algorithm consists of four main stages:
 
-1. **Auditory Filterbank Analysis**: The input signal is processed through a
-   bank of 128 filters with center frequencies logarithmically spaced from
-   17.858 Hz to 20,352.7 Hz. These filters are implemented using a
-   computationally efficient rotating phasor algorithm that computes spectral
+1. **3rd Order Complex Gammatone Filterbank**: The input signal is processed
+   through a bank of 128 bins of 3rd order filters with center frequencies 
+   spaced between 24.349 Hz and 19658.3 Hz. These filters are implemented using
+   a computationally efficient rotating phasor algorithm that computes spectral
    energy at each frequency band. The filterbank incorporates
    bandwidth-dependent exponential windowing to model frequency selectivity of
    the basilar membrane.
@@ -39,22 +39,24 @@ The algorithm consists of four main stages:
 2. **Physiological Modeling**: The filtered signals undergo several transformations 
    inspired by auditory physiology:
    - A resonator model simulating the mechanical response of the ear drum and
-     middle ear structures, implemented as a second-order IIR filter with
+     middle ear structures, implemented as a linear 32-point IIR filter with
      physiologically-motivated coefficients
-   - Energy computation through a cascade of three leaky integrators, modeling
-     temporal integration in the auditory system
+   - A second 32-point IIR filter for modeling direct absorption of sound,
+     e.g., through skull.
    - Loudness transformation using a logarithmic function with
-     frequency-dependent gains calibrated to equal-loudness contours
+     frequency-dependent gains inspired by equal-loudness contours
+   - A frequency-dependant bias energy added to signals before taking the
+     logarithm models the hearing threshold.
 
 3. **Temporal Alignment**: To handle temporal misalignments between reference
    and test signals, the algorithm employs Dynamic Time Warping (DTW) with a
    perceptually-motivated cost function. The warping path minimizes a weighted
-   combination of spectral distance (raised to power 0.233) and temporal
+   combination of spectral distance (raised to power 0.323) and temporal
    distortion penalties.
 
 4. **Perceptual Similarity Computation**: The aligned spectrograms are compared
    using a modified Neurogram Similarity Index Measure (NSIM). This metric
-   computes windowed statistics (mean, variance, covariance) over 6 temporal
+   computes windowed statistics (mean, variance, covariance) over 8 temporal
    frames and 5 frequency channels, combining intensity and structure components
    through empirically-optimized non-linear functions inspired by SSIM.
 
