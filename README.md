@@ -39,9 +39,9 @@ The algorithm consists of four main stages:
 2. **Physiological Modeling**: The filtered signals undergo several transformations 
    inspired by auditory physiology:
    - A resonator model simulating the mechanical response of the ear drum and
-     middle ear structures, implemented as a linear 32-point IIR filter with
+     middle ear structures, implemented as a linear 32-point FIR filter with
      physiologically-motivated coefficients
-   - A second 32-point IIR filter for modeling direct absorption of sound,
+   - A second 32-point FIR filter for modeling direct absorption of sound,
      e.g., through skull.
    - Loudness transformation using a logarithmic function with
      frequency-dependent gains inspired by equal-loudness contours
@@ -62,8 +62,11 @@ The algorithm consists of four main stages:
 
 ### Key Parameters
 
-- **Perceptual sampling rate**: 84 Hz (derived from [high gamma band](https://doi.org/10.1523/JNEUROSCI.5297-10.2011) frequency)
-- **NSIM temporal window**: 6 frames (~71 ms)
+- **Perceptual sampling rate**: 85 Hz (derived from [high gamma band](https://doi.org/10.1523/JNEUROSCI.5297-10.2011) frequency)
+- **NSIM temporal window**: 8 frames (~94 ms), a smaller window of 6 samples
+  gives better results in the high MOS (high quality, MOS >= 2.9) subset of 
+  our test corpora, 8 is a compromise where a better performance across a 
+  broad range of MOS is achieved.
 - **NSIM frequency window**: 5 channels
 - **Reference level**: 78.3 dB SPL for unity amplitude sine wave
 
